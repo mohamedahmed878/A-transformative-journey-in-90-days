@@ -105,7 +105,32 @@ table td:first-child{color:var(--text);width:34%;font-weight:500;}
 .chart-labels div span{display:block;color:var(--gold);font-weight:800;font-size:13px;}
 .chart-labels div em{display:block;font-style:normal;color:var(--muted);font-size:12.5px;margin-top:3px;line-height:1.5;}
 
-/* CLOSING */
+/* DAY TRACKER */
+.tracker{padding:70px 0;}
+.tracker-progress{display:flex;align-items:center;gap:14px;margin-bottom:22px;font-size:14px;color:var(--muted);}
+.tracker-progress b{color:var(--gold);font-weight:800;}
+.tracker-progress .track{margin:0;flex:1;}
+.tracker-progress .track i{transition:width .4s ease;}
+.day-grid{display:grid;grid-template-columns:repeat(13,1fr);gap:7px;}
+@media(max-width:700px){.day-grid{grid-template-columns:repeat(9,1fr);}}
+@media(max-width:420px){.day-grid{grid-template-columns:repeat(7,1fr);}}
+.day-cell{aspect-ratio:1;border-radius:8px;background:var(--surface);border:1px solid var(--line);color:var(--muted);font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .15s ease, background .2s ease, border-color .2s ease, color .2s ease;font-family:inherit;padding:0;}
+.day-cell:hover{transform:translateY(-2px);border-color:var(--gold);}
+.day-cell.done{background:linear-gradient(135deg,var(--teal),var(--gold));color:#0f1113;border-color:transparent;}
+.day-cell.done::after{content:"✓";}
+.day-cell.done span{display:none;}
+
+.panel-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:40;}
+.panel-backdrop.open{opacity:1;pointer-events:auto;}
+.day-panel{position:fixed;left:0;right:0;bottom:0;z-index:41;background:var(--surface);border-top:1px solid var(--line);border-radius:18px 18px 0 0;transform:translateY(110%);transition:transform .3s cubic-bezier(.2,.8,.2,1);padding:22px 24px calc(26px + env(safe-area-inset-bottom,0px));box-shadow:var(--sh);}
+.day-panel.open{transform:translateY(0);}
+.day-panel-inner{max-width:520px;margin:0 auto;text-align:center;position:relative;}
+.day-panel-close{position:absolute;top:-6px;left:0;background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;line-height:1;}
+.day-panel-num{display:block;font-size:34px;font-weight:900;color:var(--gold);}
+.day-panel-phase{display:block;color:var(--muted);font-size:14px;margin:6px 0 20px;}
+.day-panel-btn{border:none;border-radius:100px;padding:13px 34px;font-family:inherit;font-weight:800;font-size:15px;cursor:pointer;background:var(--gold);color:#0f1113;transition:opacity .2s;}
+.day-panel-btn.undo{background:var(--surface2);color:var(--muted);border:1px solid var(--line);}
+.day-panel-btn:active{opacity:.75;}
 .closing{text-align:center;padding:90px 0 60px;}
 .closing blockquote{font-size:clamp(19px,2.6vw,24px);font-weight:700;line-height:1.9;max-width:70ch;margin:0 auto 30px;color:var(--text);}
 .closing cite{color:var(--gold);font-style:normal;font-size:14px;display:block;}
@@ -284,6 +309,28 @@ footer{text-align:center;padding:30px 0 50px;color:var(--muted);font-size:13px;}
   </div>
 </section>
 
+<section class="tracker wrap reveal" id="trackerSec">
+  <div class="sec-head">
+    <h2>تتبع الأيام</h2>
+    <p>دوس على أي يوم لما تخلّصه، وسجّله "تم" — الجدول بيحفظ تقدّمك في المتصفح لحد ما ترجعله تاني.</p>
+  </div>
+  <div class="tracker-progress">
+    <span><b id="trackDone">0</b> / 91 يوم مكتمل</span>
+    <div class="track"><i id="trackBar"></i></div>
+  </div>
+  <div class="day-grid" id="dayGrid"></div>
+</section>
+
+<div class="panel-backdrop" id="panelBackdrop"></div>
+<div class="day-panel" id="dayPanel">
+  <div class="day-panel-inner">
+    <button class="day-panel-close" id="panelClose" aria-label="إغلاق">×</button>
+    <span class="day-panel-num" id="panelNum"></span>
+    <span class="day-panel-phase" id="panelPhase"></span>
+    <button class="day-panel-btn" id="panelBtn">تم ✓</button>
+  </div>
+</div>
+
 <section class="resultsec wrap">
   <div class="sec-head reveal">
     <h2>النتيجة على مدار الرحلة</h2>
@@ -341,6 +388,96 @@ const io = new IntersectionObserver((entries) => {
   entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
 }, {threshold:.15});
 document.querySelectorAll('.reveal, .phase, .resultsec').forEach(el => io.observe(el));
+
+// ===== Day tracker (0–90) =====
+(function(){
+  const TOTAL = 91; // days 0..90
+  const STORE_KEY = 'ninetyDayTrackerV1';
+  const grid = document.getElementById('dayGrid');
+  const doneCountEl = document.getElementById('trackDone');
+  const trackBar = document.getElementById('trackBar');
+  const backdrop = document.getElementById('panelBackdrop');
+  const panel = document.getElementById('dayPanel');
+  const panelNum = document.getElementById('panelNum');
+  const panelPhase = document.getElementById('panelPhase');
+  const panelBtn = document.getElementById('panelBtn');
+  const panelClose = document.getElementById('panelClose');
+  let currentDay = null;
+
+  function loadDone(){
+    try{
+      const raw = localStorage.getItem(STORE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    }catch(e){ return {}; }
+  }
+  function saveDone(obj){
+    try{ localStorage.setItem(STORE_KEY, JSON.stringify(obj)); }catch(e){}
+  }
+  let done = loadDone();
+
+  function phaseOf(day){
+    if(day === 0) return 'نقطة البداية';
+    if(day <= 30) return 'المرحلة 1: الأساس';
+    if(day <= 60) return 'المرحلة 2: البناء';
+    return 'المرحلة 3: الانطلاق';
+  }
+
+  function updateProgress(){
+    const n = Object.keys(done).filter(k => done[k]).length;
+    doneCountEl.textContent = n;
+    trackBar.style.width = Math.round((n / TOTAL) * 100) + '%';
+  }
+
+  function buildGrid(){
+    const frag = document.createDocumentFragment();
+    for(let d = 0; d <= 90; d++){
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'day-cell' + (done[d] ? ' done' : '');
+      btn.dataset.day = d;
+      btn.innerHTML = '<span>' + d + '</span>';
+      btn.addEventListener('click', () => openPanel(d));
+      frag.appendChild(btn);
+    }
+    grid.appendChild(frag);
+  }
+
+  function cellEl(day){ return grid.querySelector('.day-cell[data-day="'+day+'"]'); }
+
+  function openPanel(day){
+    currentDay = day;
+    panelNum.textContent = 'يوم ' + day;
+    panelPhase.textContent = phaseOf(day);
+    if(done[day]){
+      panelBtn.textContent = 'إلغاء';
+      panelBtn.classList.add('undo');
+    }else{
+      panelBtn.textContent = 'تم ✓';
+      panelBtn.classList.remove('undo');
+    }
+    backdrop.classList.add('open');
+    panel.classList.add('open');
+  }
+  function closePanel(){
+    backdrop.classList.remove('open');
+    panel.classList.remove('open');
+    currentDay = null;
+  }
+  panelBtn.addEventListener('click', () => {
+    if(currentDay === null) return;
+    done[currentDay] = !done[currentDay];
+    saveDone(done);
+    const c = cellEl(currentDay);
+    if(c) c.classList.toggle('done', !!done[currentDay]);
+    updateProgress();
+    closePanel();
+  });
+  panelClose.addEventListener('click', closePanel);
+  backdrop.addEventListener('click', closePanel);
+
+  buildGrid();
+  updateProgress();
+})();
 </script>
 </body>
 </html>
