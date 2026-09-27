@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>رحلة التغيير في 90 يوم</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f1113; --surface:#181b1f; --surface2:#20242a;
+  --text:#eef0ee; --muted:#9aa1a6;
+  --gold:#d6a756; --teal:#3e8a75; --line:rgba(255,255,255,.09);
+  --sh:0 10px 30px rgba(0,0,0,.35);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:inherit}
+html{scroll-behavior:smooth; scroll-padding-top:env(safe-area-inset-top,0px);}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'Tajawal',system-ui,sans-serif;line-height:1.75;overflow-x:hidden;}
+img,svg{max-width:100%}
+.wrap{max-width:880px;margin:0 auto;padding:0 24px;}
+
+/* HERO */
+.hero{min-height:92vh;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;}
+.hero::before{content:"";position:absolute;inset:0;background:
+  radial-gradient(600px 380px at 80% 10%, rgba(214,167,86,.14), transparent 60%),
+  radial-gradient(500px 350px at 10% 90%, rgba(62,138,117,.14), transparent 60%);
+  pointer-events:none;}
+.eyebrow{color:var(--gold);font-weight:700;font-size:15px;letter-spacing:.02em;}
+.hero h1{font-size:clamp(38px,7vw,72px);font-weight:900;margin:14px 0 18px;line-height:1.15;}
+.hero h1 span{color:var(--gold)}
+.hero p{color:var(--muted);font-size:18px;max-width:60ch;margin:0 0 34px;}
+.count90{display:flex;align-items:baseline;gap:10px;font-weight:900;}
+.count90 b{font-size:80px;color:var(--gold);font-variant-numeric:tabular-nums;}
+.count90 span{color:var(--muted);font-size:17px;font-weight:500;}
+.track{margin-top:26px;height:8px;border-radius:6px;background:var(--surface2);overflow:hidden;width:100%;max-width:420px;}
+.track i{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--teal),var(--gold));transition:width 1.6s cubic-bezier(.2,.8,.2,1);}
+.scrolldown{position:absolute;bottom:26px;right:24px;color:var(--muted);font-size:13px;display:flex;align-items:center;gap:8px;}
+.scrolldown i{width:1px;height:26px;background:var(--muted);display:block;animation:down 1.6s infinite;}
+@keyframes down{0%{transform:scaleY(.2);opacity:0}50%{transform:scaleY(1);opacity:1}100%{transform:scaleY(.2);opacity:0}}
+
+/* SECTION HEADERS */
+section{padding:70px 0;}
+.sec-head{margin-bottom:36px;}
+.sec-head h2{font-size:clamp(26px,4vw,38px);font-weight:800;margin:0 0 8px;}
+.sec-head p{color:var(--muted);margin:0;font-size:16px;max-width:65ch;}
+
+/* INTRO CARD */
+.intro-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.intro-grid div{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 16px;text-align:center;}
+.intro-grid b{display:block;font-size:15px;color:var(--gold);margin-bottom:4px;}
+.intro-grid span{font-size:13px;color:var(--muted);}
+@media(max-width:700px){.intro-grid{grid-template-columns:repeat(2,1fr);}}
+
+/* TIMELINE / PHASES */
+.timeline{position:relative;padding-inline-start:34px;}
+.timeline::before{content:"";position:absolute;inset-inline-start:9px;top:6px;bottom:6px;width:2px;background:linear-gradient(var(--teal),var(--gold));opacity:.5;}
+.phase{position:relative;margin-bottom:64px;opacity:0;transform:translateY(24px);transition:opacity .7s ease, transform .7s ease;}
+.phase.in{opacity:1;transform:translateY(0);}
+.phase::before{content:attr(data-n);position:absolute;right:-34px;top:2px;width:20px;height:20px;border-radius:50%;background:var(--bg);border:2px solid var(--gold);}
+.phase-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:12px;margin-bottom:6px;}
+.phase-head h3{font-size:26px;font-weight:800;margin:0;}
+.phase-days{color:var(--gold);font-weight:700;font-size:14px;background:rgba(214,167,86,.1);border:1px solid rgba(214,167,86,.3);padding:3px 12px;border-radius:100px;}
+.phase-goal{color:var(--muted);margin:6px 0 22px;font-size:15.5px;}
+
+.cats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px;}
+@media(max-width:760px){.cats{grid-template-columns:repeat(2,1fr);}}
+.cat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;}
+.cat-h{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.cat-h svg{width:20px;height:20px;flex:none;}
+.cat-h b{font-size:14.5px;}
+.cat ul{margin:0;padding-inline-start:18px;font-size:13.5px;color:var(--muted);}
+.cat li{margin-bottom:5px;}
+.health svg{stroke:var(--gold)}
+.mind svg{stroke:#8fb3d9}
+.edu svg{stroke:var(--teal)}
+.money svg{stroke:#d98757}
+
+details.day-table{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px 18px;margin-bottom:14px;}
+details.day-table summary{cursor:pointer;padding:14px 0;font-weight:700;font-size:15px;color:var(--text);list-style:none;display:flex;justify-content:space-between;align-items:center;}
+details.day-table summary::after{content:"+";color:var(--gold);font-size:20px;transition:transform .3s;}
+details.day-table[open] summary::after{transform:rotate(45deg);}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin-bottom:16px;}
+table td{padding:8px 6px;border-top:1px solid var(--line);color:var(--muted);}
+table td:first-child{color:var(--text);width:34%;font-weight:500;}
+
+.exercise-box{background:var(--surface2);border-inline-start:3px solid var(--teal);border-radius:10px;padding:14px 16px;font-size:14px;color:var(--muted);margin-top:4px;}
+.exercise-box b{color:var(--text);}
+
+/* RESULTS CHART */
+.resultsec{padding:70px 0 30px;}
+.chart-box{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:28px 20px 10px;}
+.chart-box svg{width:100%;height:auto;display:block;}
+.chart-line{fill:none;stroke:url(#lg);stroke-width:3;stroke-linecap:round;stroke-dasharray:900;stroke-dashoffset:900;transition:stroke-dashoffset 1.8s cubic-bezier(.2,.8,.2,1);}
+.resultsec.in .chart-line{stroke-dashoffset:0;}
+.chart-dot{fill:var(--bg);stroke:var(--gold);stroke-width:2;opacity:0;transform:scale(.4);transform-origin:center;transition:opacity .5s ease, transform .5s ease;}
+.resultsec.in .chart-dot{opacity:1;transform:scale(1);}
+.resultsec.in .chart-dot:nth-of-type(2){transition-delay:.4s}
+.resultsec.in .chart-dot:nth-of-type(3){transition-delay:.8s}
+.resultsec.in .chart-dot:nth-of-type(4){transition-delay:1.2s}
+.chart-labels{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:6px;text-align:center;}
+.chart-labels div span{display:block;color:var(--gold);font-weight:800;font-size:13px;}
+.chart-labels div em{display:block;font-style:normal;color:var(--muted);font-size:12.5px;margin-top:3px;line-height:1.5;}
+
+/* CLOSING */
+.closing{text-align:center;padding:90px 0 60px;}
+.closing blockquote{font-size:clamp(19px,2.6vw,24px);font-weight:700;line-height:1.9;max-width:70ch;margin:0 auto 30px;color:var(--text);}
+.closing cite{color:var(--gold);font-style:normal;font-size:14px;display:block;}
+footer{text-align:center;padding:30px 0 50px;color:var(--muted);font-size:13px;}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease;}
+.reveal.in{opacity:1;transform:translateY(0);}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+</style>
+</head>
+<body>
+
+<section class="hero wrap">
+  <span class="eyebrow">MIGO — دليل التطوير الشخصي</span>
+  <h1>رحلة التغيير<br>في <span id="d90">90</span> يوم</h1>
+  <p>خطة عملية يوم بيوم لتطوير صحتك، عقلك، ومصدر دخلك — من غير فلسفة ومن غير كلام تحفيزي فاضي.</p>
+  <div class="count90"><b><span id="counter">0</span></b><span>يوم من الانضباط بيغيّر النسخة اللي انت فيها دلوقتي</span></div>
+  <div class="track"><i id="bar"></i></div>
+  <div class="scrolldown"><i></i>ابدأ الرحلة</div>
+</section>
+
+<section class="wrap">
+  <div class="sec-head reveal">
+    <h2>المقدمة</h2>
+    <p>التغيير مش محتاج سنة ولا معجزة، محتاج قرار وخطة عملية والتزام لمدة 90 يوم بس. الخطة مقسّمة لـ 3 مراحل، كل مرحلة شهر، وكل شهر بيبني على اللي قبله.</p>
+  </div>
+  <div class="intro-grid reveal">
+    <div><b>الصحة</b><span>جسم وطاقة</span></div>
+    <div><b>العقل</b><span>تركيز ووضوح</span></div>
+    <div><b>التعليم</b><span>مهارة حقيقية</span></div>
+    <div><b>الفلوس</b><span>أول دخل من النت</span></div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="sec-head reveal">
+    <h2>خط الرحلة</h2>
+    <p>ثلاث مراحل، كل واحدة 30 يوم، من كسر الروتين القديم لحد بناء دخل ثابت.</p>
+  </div>
+
+  <div class="timeline">
+
+    <!-- PHASE 1 -->
+    <article class="phase" data-n="1">
+      <div class="phase-head"><h3>الأساس</h3><span class="phase-days">اليوم 1 – 30</span></div>
+      <p class="phase-goal">الهدف: كسر الروتين القديم وبناء عادات صغيرة ثابتة.</p>
+
+      <div class="cats">
+        <div class="cat health"><div class="cat-h">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M6.5 6.5l11 11M4 9l3-3 2 2-3 3-2-2zm11 11l3-3-2-2-3 3 2 2zM2 12h2m16 0h2M12 2v2m0 16v2"/></svg>
+          <b>الصحة</b></div>
+          <ul><li>جيم 4 مرات أسبوعيًا (Upper/Lower)</li><li>أكل صحي 70% من الوقت</li><li>3 لتر مياه يوميًا</li><li>نوم 7–8 ساعات</li></ul>
+        </div>
+        <div class="cat mind"><div class="cat-h">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M12 3a5 5 0 015 5c0 2-1 3-1 5v2H8v-2c0-2-1-3-1-5a5 5 0 015-5z"/><path d="M9 19h6M10 22h4"/></svg>
+          <b>العقل</b></div>
+          <ul><li>قراءة كتاب واحد (العادات الذرية)</li><li>Journal يومي 5 دقايق</li></ul>
+        </div>
+        <div class="cat edu"><div class="cat-h">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+          <b>التعليم</b></div>
+          <ul><li>تحديد مهارة أساسية (برمجة/لغة)</li><li>ساعة تعلم يوميًا + تطبيق عملي</li></ul>
+        </div>
+        <div class="cat money"><div class="cat-h">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 10c0-1.5 3-1.5 3-1.5s3 0 3 1.5-3 1.5-3 1.5 3 0 3 1.5-3 1.5-3 1.5"/></svg>
+          <b>الفلوس</b></div>
+          <ul><li>مصدر دخل بسيط: كتابة، خدمات أونلاين، تفريغ نصوص</li><li>هدف الشهر: أول 1000 جنيه من النت</li></ul>
+        </div>
+      </div>
+
+      <details class="day-table"><summary>جدول يوم كامل — أول 30 يوم</summary>
+        <table>
+          <tr><td>5:00 ص</td><td>استيقاظ – صلاة/تأمل – مياه</td></tr>
+          <tr><td>5:30 ص</td><td>جيم / كارديو</td></tr>
+          <tr><td>7:00 ص</td><td>فطار صحي</td></tr>
+          <tr><td>8:00 ص</td><td>تعلم المهارة (برمجة/لغة)</td></tr>
+          <tr><td>10:30 ص</td><td>عمل أونلاين / تجربة خدمة مصغّرة</td></tr>
+          <tr><td>2:00 م</td><td>قراءة 20 دقيقة</td></tr>
+          <tr><td>4:00 م</td><td>مراجعة وتطبيق عملي للمهارة</td></tr>
+          <tr><td>8:00 م</td><td>كتابة يومية (5–10 دقايق)</td></tr>
+          <tr><td>9:00 م</td><td>نوم بدري</td></tr>
+        </table>
+      </details>
+
+      <div class="exercise-box"><b>تمارين عملية: </b>اكتب سبب رغبتك في التغيير على ورقة، خُد صورة "قبل" لجسمك، واعمل جدول متابعة يومي (✓/✗) للنوم والجيم والتعلم والدخل.</div>
+    </article>
+
+    <!-- PHASE 2 -->
+    <article class="phase" data-n="2">
+      <div class="phase-head"><h3>البناء</h3><span class="phase-days">اليوم 31 – 60</span></div>
+      <p class="phase-goal">الهدف: تطوير النسخة الجديدة اللي بدأت تظهر، وزيادة الإنجازات.</p>
+
+      <div class="cats">
+        <div class="cat health"><div class="cat-h">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M6.5 6.5l11 11M4 9l3-3 2 2-3 3-2-2zm11 11l3-3-2-2-3 3 2 2zM2 12h2m16 0h2M12 2v2m0 16v2"/></svg>
+          <b>الصحة</b></div>
+          <ul><li>زيادة الأوزان تدريجيًا</li><li>HIIT مرتين أسبوعيًا (20 د)</li><li>تقليل الأكل الصناعي</li><li>متابعة الوزن أسبوعيًا (2-4 كجم)</li></ul>
+        </div>
+        <div class="cat mind"><div class="cat-h">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M12 3a5 5 0 015 5c0 2-1 3-1 5v2H8v-2c0-2-1-3-1-5a5 5 0 015-5z"/><path d="M9 19h6M10 22h4"/></svg>
+          <b>العقل</b></div>
+          <ul><li>كتاب بزنس (الأب الغني والأب الفقير)</li><li>كتابة 10 دقايق يوميًا</li><li>محادثات إنجليزي (AI / HelloTalk)</li></ul>
+        </div>
+        <div class="cat edu"><div class="cat-h">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+          <b>التعليم</b></div>
+          <ul><li>تعمق في المهارة (Databases: SQL/Mongo)</li><li>مشروع متوسط CRUD + API كاملة</li><li>نشر المشروع على GitHub/LinkedIn</li></ul>
+        </div>
+        <div class="cat money"><div class="cat-h">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 10c0-1.5 3-1.5 3-1.5s3 0 3 1.5-3 1.5-3 1.5 3 0 3 1.5-3 1.5-3 1.5"/></svg>
+          <b>الفلوس</b></div>
+          <ul><li>أول خدمة حقيقية: Landing Page، كتابة، سوشيال</li><li>بورتفوليو بسيط (صفحة/PDF)</li><li>هدف الشهر: 2000–3000 جنيه</li></ul>
+        </div>
+      </div>
+
+      <details class="day-table"><summary>جدول يوم كامل — اليوم 31–60</summary>
+        <table>
+          <tr><td>5:00 ص</td><td>استيقاظ – صلاة – مياه</td></tr>
+          <tr><td>5:30 ص</td><td>جيم (زيادة الأوزان)</td></tr>
+          <tr><td>8:00 ص</td><td>تعلم Databases + مشروع متوسط</td></tr>
+          <tr><td>10:30 ص</td><td>تنفيذ خدمات وتطوير البورتفوليو</td></tr>
+          <tr><td>2:00 م</td><td>قراءة كتاب بزنس/فكر</td></tr>
+          <tr><td>4:00 م</td><td>تطوير المشروع ونشره على GitHub</td></tr>
+          <tr><td>7:00 م</td><td>إنجليزي (محادثة/كتابة)</td></tr>
+        </table>
+      </details>
+
+      <div class="exercise-box"><b>تمارين عملية: </b>سجّل أوزانك في الجيم (Squat, Bench, Deadlift) وتابعها أسبوعيًا، اكتب خطوات مشروعك من البداية للنهاية، وقدّم خدمة واحدة على منصة فريلانس حتى لو ببلاش أول مرة.</div>
+    </article>
+
+    <!-- PHASE 3 -->
+    <article class="phase" data-n="3">
+      <div class="phase-head"><h3>الانطلاق</h3><span class="phase-days">اليوم 61 – 90</span></div>
+      <p class="phase-goal">الهدف: تحويل التغييرات لأسلوب حياة، وتحقيق دخل ثابت أولي.</p>
+
+      <div class="cats">
+        <div class="cat health"><div class="cat-h">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M6.5 6.5l11 11M4 9l3-3 2 2-3 3-2-2zm11 11l3-3-2-2-3 3 2 2zM2 12h2m16 0h2M12 2v2m0 16v2"/></svg>
+          <b>الصحة</b></div>
+          <ul><li>Gain Muscle + Loss Fat واضح</li><li>تجربة صيام متقطع لو مناسب</li><li>هدف: أقل 6–8 كجم عن البداية</li></ul>
+        </div>
+        <div class="cat mind"><div class="cat-h">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M12 3a5 5 0 015 5c0 2-1 3-1 5v2H8v-2c0-2-1-3-1-5a5 5 0 015-5z"/><path d="M9 19h6M10 22h4"/></svg>
+          <b>العقل</b></div>
+          <ul><li>كتاب ثاني (Atomic Habits / Fastlane)</li><li>كتابة يومية 15 دقيقة</li><li>تأمل/تنفس 5–10 دقايق</li></ul>
+        </div>
+        <div class="cat edu"><div class="cat-h">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+          <b>التعليم</b></div>
+          <ul><li>إنهاء مشروع كامل (مثال: E-commerce بسيط)</li><li>Portfolio Website شخصي</li><li>مشاركة محتوى عن رحلتك</li></ul>
+        </div>
+        <div class="cat money"><div class="cat-h">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 10c0-1.5 3-1.5 3-1.5s3 0 3 1.5-3 1.5-3 1.5 3 0 3 1.5-3 1.5-3 1.5"/></svg>
+          <b>الفلوس</b></div>
+          <ul><li>تحويل المهارة لدخل ثابت</li><li>هدف الشهر: 4000–6000 جنيه</li><li>بيع منتج/خدمة مستقلة (Template/Merch)</li></ul>
+        </div>
+      </div>
+
+      <details class="day-table"><summary>جدول يوم كامل — اليوم 61–90</summary>
+        <table>
+          <tr><td>5:00 ص</td><td>استيقاظ – صلاة – تأمل بسيط</td></tr>
+          <tr><td>5:30 ص</td><td>جيم (Hypertrophy Focus)</td></tr>
+          <tr><td>8:00 ص</td><td>تطوير المشروع الكامل (E-commerce/SaaS)</td></tr>
+          <tr><td>11:00 ص</td><td>محتوى (فيديو/بوست عن رحلتك)</td></tr>
+          <tr><td>1:00 م</td><td>دخل إضافي / فريلانس</td></tr>
+          <tr><td>4:00 م</td><td>إنجليزي (محادثة/كتابة)</td></tr>
+          <tr><td>7:00 م</td><td>قراءة + كتابة يومية</td></tr>
+        </table>
+      </details>
+
+      <div class="exercise-box"><b>تمارين عملية: </b>صوّر جسمك يوم 90 وقارنه بصورة يوم 1، ارفع مشروعك النهائي على LinkedIn وGitHub، واعرض خدمتك أو منتجك للناس — حتى أول مبيعات قليلة هي بداية الطريق.</div>
+    </article>
+
+  </div>
+</section>
+
+<section class="resultsec wrap">
+  <div class="sec-head reveal">
+    <h2>النتيجة على مدار الرحلة</h2>
+    <p>مش هتحس بفرق كبير كل يوم، بس كل مرحلة بتضيف طبقة جديدة فوق اللي قبلها.</p>
+  </div>
+  <div class="chart-box">
+    <svg viewBox="0 0 600 200" preserveAspectRatio="none">
+      <defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#3e8a75"/><stop offset="100%" stop-color="#d6a756"/>
+      </linearGradient></defs>
+      <path class="chart-line" d="M40,168 C120,160 150,120 210,112 C280,103 320,60 380,52 C440,44 500,20 560,14"/>
+      <circle class="chart-dot" cx="40" cy="168" r="6"/>
+      <circle class="chart-dot" cx="210" cy="112" r="6"/>
+      <circle class="chart-dot" cx="380" cy="52" r="6"/>
+      <circle class="chart-dot" cx="560" cy="14" r="6"/>
+    </svg>
+    <div class="chart-labels">
+      <div><span>يوم 1</span><em>بداية، روتين قديم</em></div>
+      <div><span>يوم 30</span><em>عادات ثابتة، أول 1000ج</em></div>
+      <div><span>يوم 60</span><em>مشروع برمجي + دخل حقيقي</em></div>
+      <div><span>يوم 90</span><em>جسم واضح + دخل 4000–6000ج</em></div>
+    </div>
+  </div>
+</section>
+
+<section class="closing wrap reveal">
+  <blockquote>"بعد 90 يوم، هتبص لورا وتشوف إنك مش نفس الشخص اللي بدأ. رحلتك لسه في بدايتها... فاستمر، وخلي كل يوم يقربك أكتر من حلمك الكبير."</blockquote>
+  <cite>الخاتمة — رحلة التغيير في 90 يوم</cite>
+</section>
+
+<footer>رحلة التغيير في 90 يوم — دليلك لتطوير صحتك، مالك، وعقلك</footer>
+
+<script>
+// counter + progress bar animate once hero is visible
+const counterEl = document.getElementById('counter');
+const bar = document.getElementById('bar');
+let started = false;
+function animateCounter(){
+  if(started) return; started = true;
+  bar.style.width = '100%';
+  let n = 0;
+  const target = 90;
+  const step = () => {
+    n += Math.max(1, Math.round((target - n) / 10));
+    if(n >= target){ n = target; counterEl.textContent = n; return; }
+    counterEl.textContent = n;
+    requestAnimationFrame(() => setTimeout(step, 16));
+  };
+  step();
+}
+setTimeout(animateCounter, 500);
+
+// reveal on scroll
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+}, {threshold:.15});
+document.querySelectorAll('.reveal, .phase, .resultsec').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
